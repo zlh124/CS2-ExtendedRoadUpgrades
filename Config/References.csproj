@@ -55,6 +55,9 @@
 		<Reference Include="cohtml.Net">
 			<Private>false</Private>
 		</Reference>
+		<Reference Include="netstandard">
+			<Private>false</Private>
+		</Reference>
 	</ItemGroup>
 	<ItemGroup>
 		<Reference Update="System">

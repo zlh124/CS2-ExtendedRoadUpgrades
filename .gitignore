@@ -362,3 +362,11 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /Library
+
+# Local build artifacts
+build.log
+.tmp/
+bin/
+obj/
+Properties/pdx_account.txt
+publish.log

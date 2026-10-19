@@ -1,35 +1,68 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<Title>Extended Road Upgrades</Title>
+		<Title>Extended Road Upgrades Continued</Title>
 		<AssemblyTitle>$(Title)</AssemblyTitle>
-		<Description>A Cities: Skylines 2 mod that enables multiple upgrade options for your roads.</Description>
-		<Authors>ST-Apps</Authors>
+		<Description>Independent continuation of Extended Road Upgrades, ported to Cities: Skylines II 1.5 and newer. Cannot be enabled together with the original mod.</Description>
+		<Authors>ST-Apps (original mod)</Authors>
 		<Copyright>Copyright © 2023-24 ST-Apps (github.com/ST-Apps). All rights reserved.</Copyright>
 		<Product>$(Title)</Product>
-		<Version>1.4.0</Version>
+		<Version>1.0.0</Version>
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
-		<TargetFramework>net472</TargetFramework>
-		<LangVersion>latest</LangVersion>
+		<TargetFramework>net48</TargetFramework>
+		<LangVersion>9.0</LangVersion>
 		<Configurations>Debug;Release</Configurations>
-		<PDXAccountDataPath>D:\pdx_account.txt</PDXAccountDataPath>
+		<PDXAccountDataPath>Properties\pdx_account.txt</PDXAccountDataPath>
 		<PublishConfigurationPath>Properties\PublishConfiguration.xml</PublishConfigurationPath>
 	</PropertyGroup>
 
-	<Import Project="Config/References.csproj" />
-	<Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.props" />
-	<Import Project="$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))\Mod.targets" />
+	<!--
+	  Toolchain resolution.
 
-	<ItemGroup>
+	  The official modding toolchain ships Mod.props / Mod.targets inside the game installation
+	  (Cities2_Data\Content\Game\.ModdingToolchain). It is normally located through the user-scoped
+	  CSII_TOOLPATH environment variable, which is only set after running the in-game toolchain setup.
+
+	  CsiiToolchainPath can be passed explicitly (-p:CsiiToolchainPath=...), which is what build.ps1 does,
+	  so the project builds on machines where that environment variable was never configured.
+	-->
+	<PropertyGroup>
+		<_CsiiToolPathFromEnvironment>$([System.Environment]::GetEnvironmentVariable('CSII_TOOLPATH', 'EnvironmentVariableTarget.User'))</_CsiiToolPathFromEnvironment>
+		<CsiiToolchainPath Condition="'$(CsiiToolchainPath)' == ''">$(_CsiiToolPathFromEnvironment)</CsiiToolchainPath>
+	</PropertyGroup>
+
+	<Import Project="Config/References.csproj" />
+	<Import Project="$(CsiiToolchainPath)\Mod.props" Condition="'$(CsiiToolchainPath)' != '' And Exists('$(CsiiToolchainPath)\Mod.props')" />
+	<!--
+	  Mod.targets runs the Mod Post Processor (Unity ILPP / Burst extraction) and deploys the result.
+	  It requires a Unity editor installation and the generated Unity Mods project; when they are not
+	  available the build is still valid, build.ps1 then deploys the output itself.
+	-->
+	<Import Project="$(CsiiToolchainPath)\Mod.targets" Condition="'$(CsiiToolchainPath)' != '' And Exists('$(CsiiToolchainPath)\Mod.targets') And '$(SkipModTargets)' != 'true'" />
+
+	<!--
+	  The toolchain ships a set of Unity.Entities source generators through a Unity project
+	  (CSII_UNITYMODPROJECTPATH). This mod does not use SystemAPI / generated systems, so the
+	  generators (and their availability check) are optional.
+	-->
+	<Target Name="RemoveMissingAnalyzers" BeforeTargets="CoreCompile">
+		<ItemGroup>
+			<_MissingAnalyzer Include="@(Analyzer)" Condition="!Exists('%(Identity)')" />
+			<Analyzer Remove="@(_MissingAnalyzer)" />
+		</ItemGroup>
+	</Target>
+	<Target Name="CheckEntityPackagePath" />
+	<Target Name="CheckUnityModProjectPath" Condition="'$(UnityModProjectPath)' != '' And !Exists('$(UnityModProjectPath)')">
+		<Error Text="User environment variable 'CSII_UNITYMODPROJECTPATH' has incorrect path(s) '$(UnityModProjectPath)' set. Please update the Modding toolchain in-game to reset its value or modify its value to a suitable path" />
+	</Target>
+
+	<ItemGroup Condition="'$(ModPropsFile)' != ''">
 		<None Include="$(ModPropsFile)" Link="Properties/Mod.props" />
 		<None Include="$(ModTargetsFile)" Link="Properties/Mod.targets" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<None Include="Config/References.csproj" />
-	</ItemGroup>
-	<ItemGroup>
-		<Folder Include="Properties\Screenshots\" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -43,33 +76,49 @@
 	  <EmbeddedResource Include="l10n\en-US.csv" />
 	</ItemGroup>
 
+	<!--
+	  Harmony is not shipped with the game, so every mod has to bundle its own copy.
+	  The reference is kept local (libs\0Harmony.dll) because NuGet is not always reachable
+	  from modding machines; the file is the same 2.2.2 build the game's modding community uses.
+	-->
 	<ItemGroup>
-		<PackageReference Include="Lib.Harmony" Version="2.2.2" />
-		<PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
+		<Reference Include="0Harmony">
+			<HintPath>$(MSBuildThisFileDirectory)libs\0Harmony.dll</HintPath>
+			<Private>true</Private>
+		</Reference>
 	</ItemGroup>
 
 	<ItemGroup>
 		<Icons Include="$(ProjectDir)/Icons/*.svg" />
 	</ItemGroup>
-	<Target Name="CopyIcons" AfterTargets="AfterBuild">
+	<Target Name="CopyIcons" AfterTargets="AfterBuild" Condition="'$(DeployDir)' != ''">
 		<Copy SourceFiles="@(Icons)" DestinationFolder="$(DeployDir)/Icons" />
 	</Target>
 
-	<Target Name="SetDescription" BeforeTargets="BeforeBuild">
+	<Target Name="SetDescription" BeforeTargets="BeforeBuild" Condition="Exists('$(PublishConfigurationPath)')">
 		<XmlPoke XmlInputPath="$(PublishConfigurationPath)" Value="$([System.IO.File]::ReadAllText($(ProjectDir)/Properties/LongDescription.md))" Query="//LongDescription" />
 		<XmlPoke XmlInputPath="$(PublishConfigurationPath)" Value="$([System.IO.File]::ReadAllText($(ProjectDir)/Properties/LatestChangelog.md))" Query="//ChangeLog" />
 		<XmlPoke XmlInputPath="$(PublishConfigurationPath)" Value="$(Version)" Query="//ModVersion/@Value" />
 	</Target>
 
-	<Target Name="Cleanup" AfterTargets="AfterBuild">
+	<Target Name="Cleanup" AfterTargets="AfterBuild" Condition="'$(DeployDir)' != ''">
 		<ItemGroup>
 			<CleanTargets Include="$(DeployDir)/$(ProjectName).xml" />
 			<CleanTargets Include="$(DeployDir)/*.pdb" />
 		</ItemGroup>
 		<Delete Files="@(CleanTargets)" />
+	</Target>
+
+	<!--
+	  Pass the PDX credentials file to the Mod Publisher when one is available (Properties\pdx_account.txt with
+	  the account email on the first line and the password on the second). Without it the publisher falls back to
+	  the session the game itself stored, which is what happens when publishing from inside the game.
+	-->
+	<Target Name="CustomModPublisherConfig" AfterTargets="ModPublisherConfig" Condition="'$(PDXAccountDataPath)' != '' And Exists('$(PDXAccountDataPath)')">
+		<PropertyGroup>
+			<ModPublisherArgs>$(ModPublisherArgs) --loginData "$(PDXAccountDataPath)"</ModPublisherArgs>
+		</PropertyGroup>
+		<Message Text="Using PDX credentials from $(PDXAccountDataPath)" Importance="high" />
 	</Target>
 
 </Project>
