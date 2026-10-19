@@ -1,4 +1,4 @@
-﻿// <copyright file="Mod.cs" company="ST-Apps (S. Tenuta)">
+// <copyright file="Mod.cs" company="ST-Apps (S. Tenuta)">
 // Copyright (c) ST-Apps (S. Tenuta). All rights reserved.
 // Licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License (the "License"); you may not use this file except in compliance with the License.
 // See LICENSE.txt file in the project root for full license information.
@@ -28,15 +28,16 @@ namespace ExtendedRoadUpgrades
         /// <summary>
         /// The mod's default name.
         /// </summary>
-        public const string ModName = "Extended Road Upgrades";
+        public const string ModName = "Extended Road Upgrades Continued";
 
         /// <summary>
         /// Id used for the coui:// protocol.
         /// </summary>
-        public const string ModIconsId = "eru";
+        public const string ModIconsId = "eruc";
 
-        // Mod Harmony id.
-        private readonly string s_modHarmonyId = $"STApps_{nameof(ExtendedRoadUpgrades)}";
+        // Mod Harmony id. Deliberately different from the original mod's one: both mods use the same patch
+        // targets, and a shared id would let either of them unpatch the other.
+        private readonly string s_modHarmonyId = "STApps_ExtendedRoadUpgrades_Continued";
 
         // Mod assembly path cache.
         private string s_assemblyPath = null;
@@ -105,7 +106,7 @@ namespace ExtendedRoadUpgrades
             UIManager.defaultUISystem.AddHostLocation("uil",  AssemblyPath + "/Icons/");
 
             // Apply harmony patches.
-            new Patcher($"ST-Apps_{nameof(ExtendedRoadUpgrades)}", Log);
+            new Patcher(s_modHarmonyId, Log);
 
             // Don't do anything if Harmony patches weren't applied.
             if (Patcher.Instance is null || !Patcher.Instance.PatchesApplied)

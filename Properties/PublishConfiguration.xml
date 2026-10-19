@@ -1,12 +1,20 @@
 <Publish>
-  <!--Id must be set in order to update existed mod. it is not required for publishing mod for the first time-->
-  <ModId Value="76971" />
+  <!--Id must be set in order to update existed mod. it is not required for publishing mod for the first time.
+      164028 is this continuation's own PDX Mods entry (76971 is the original author's entry and is left untouched).
+      Use 'dotnet publish -p:ModPublisherCommand=Update' (or .\build.ps1 -Publish Update) to release new versions.-->
+  <ModId Value="164028" />
   <!--Name of the mod to display to players-->
-  <DisplayName Value="Extended Road Upgrades" />
+  <DisplayName Value="Extended Road Upgrades Continued" />
   <!--Short description of the mod-->
-  <ShortDescription Value="Enables multiple upgrade options for your roads." />
+  <ShortDescription Value="Updated, working build of Extended Road Upgrades for game 1.5+. Not compatible with the original mod: disable it first." />
   <!--Long description of the mod. Single line or multi line. Supports minimal markdown subset-->
-  <LongDescription>## Description
+  <LongDescription>## Important - read before subscribing
+
+This is **not the original mod**. It is an independent continuation of *Extended Road Upgrades* by ST-Apps, which was last updated for game version 1.4 and no longer loads with game versions 1.5 / 1.6.
+
+**This mod cannot be used together with the original Extended Road Upgrades.** Both register the same upgrade modes and patch the same game methods, so having both enabled duplicates the upgrade modes and produces conflicting road data. Disable or unsubscribe from the original mod and restart the game before using this one.
+
+## Description
 This mod enables some additional upgrade modes for your roads, giving you full control on the type of roads you can build without needing to precisely terraform beforehand.
 
 These upgrades are available in the in-game upgrade mode for roads and can be used exactly like any other upgrade mode (e.g. Grass or Wide Sidewalk).
@@ -23,7 +31,12 @@ These upgrades can be applied to:
 - Public Transport Roads
 - Train Tracks
 - Tram Tracks
-- Subway Tracks</LongDescription>
+- Subway Tracks
+
+## Compatibility
+- Supported game versions: 1.5 and newer (developed and tested against 1.6.2).
+- Not compatible with the original Extended Road Upgrades mod - the two cannot be enabled at the same time.
+- Existing saves keep working. Roads upgraded with the original mod remain valid; just re-apply the upgrade if a road looks wrong.</LongDescription>
   <!--Thumbnail-->
   <Thumbnail Value="Properties/Thumbnail.png" />
   <!--Screenshot, can be set multiple times-->
@@ -32,21 +45,27 @@ These upgrades can be applied to:
   <Screenshot Value="Properties/Screenshots/Elevated.png" />
   <!--Tag, can be set multiple times-->
   <Tag Value="Code Mod" />
-  <!--Link to the forum post where the mod can be discussed-->
-  <ForumLink Value="https://forum.paradoxplaza.com/forum/threads/extended-road-upgrades.1651035/" />
+  <!--Link to the forum post where the mod can be discussed.
+      Intentionally not set: the original forum thread belongs to the discontinued upstream mod.-->
   <!--Version of the mod-->
-  <ModVersion Value="1.4.0" />
+  <ModVersion Value="1.0.0" />
   <!--Recommended version of the base game to use the mod-->
-  <GameVersion Value="1.*" />
-  <!--Dependency for the mod, can be set multiple times-->
-  <Dependency Id="74417" DisplayName="Unified Icon Library" />
-  <!--Change log for new version. Single line or multi line. Supports minimal markdown subset-->
-  <ChangeLog># 1.4.0
+  <GameVersion Value="1.6.*" />
+  <!--Dependency for the mod, can be set multiple times.
+      The original mod depended on 'Unified Icon Library', but this mod hosts its own icons (coui://eruc/) and does
+      not reference that library, so no dependency is declared.-->
+  <!--ChangeLog for new version. Single line or multi line. Supports minimal markdown subset-->
+  <ChangeLog># 1.0.0
 
-- [FIX] Improved handling for Raised roundabouts
-- [FIX] Improved handling for connected Tunnels
-- [ADD] Localization for ZH-HANS and ZH-HANT</ChangeLog>
-  <!--External link. supported types are discord, github, youtube, twitch, x, paypal, patreon-->
+First release of the independent continuation of Extended Road Upgrades, ported to game version 1.6. Versioning restarts at 1.0.0 because this is published as a separate mod entry.
+
+- [NEW] This is a separate mod from the original Extended Road Upgrades: the two cannot be enabled at the same time (disable the original first)
+- [FIX] Mod not loading anymore with game versions 1.5 / 1.6 (the old build called game methods that no longer exist)
+- [FIX] Upgrade prefabs are now copied with the game's own clone routine: no more "referenced from another prefab" errors and no more corruption of the vanilla upgrade
+- [FIX] Upgrades are installed even if the game prefabs are not ready yet at load time
+- [ADD] A clear error is logged when another version of the mod already registered the upgrade prefabs</ChangeLog>
+  <!--External link. supported types are discord, github, youtube, twitch, x, paypal, patreon
+      Only the upstream source repository is linked (attribution of the original work, required by CC BY-NC-SA).
+      The original author's donation and forum links are intentionally not listed here.-->
   <ExternalLink Type="github" Url="https://github.com/ST-Apps/CS2-ExtendedRoadUpgrades" />
-  <ExternalLink Type="paypal" Url="https://www.paypal.me/STApps" />
 </Publish>
