@@ -4,7 +4,7 @@
 		<AssemblyTitle>$(Title)</AssemblyTitle>
 		<Description>Independent continuation of Extended Road Upgrades, ported to Cities: Skylines II 1.5 and newer. Cannot be enabled together with the original mod.</Description>
 		<Authors>ST-Apps (original mod)</Authors>
-		<Copyright>Copyright © 2023-24 ST-Apps (github.com/ST-Apps). All rights reserved.</Copyright>
+		<Copyright>Copyright © 2023-24 ST-Apps (S. Tenuta) - original work, CC BY-NC-SA 4.0. Modifications © the Extended Road Upgrades Continued authors.</Copyright>
 		<Product>$(Title)</Product>
 		<Version>1.0.0</Version>
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
@@ -93,6 +93,19 @@
 	</ItemGroup>
 	<Target Name="CopyIcons" AfterTargets="AfterBuild" Condition="'$(DeployDir)' != ''">
 		<Copy SourceFiles="@(Icons)" DestinationFolder="$(DeployDir)/Icons" />
+	</Target>
+
+	<!--
+	  The published mod bundles third party code, so the license texts travel with it:
+	  the original mod is CC BY-NC-SA 4.0 (ShareAlike requires the same license on this derivative)
+	  and Harmony is MIT (requires its notice to be distributed alongside the binary).
+	-->
+	<ItemGroup>
+		<LicenseFiles Include="$(ProjectDir)LICENSE.txt" />
+		<LicenseFiles Include="$(ProjectDir)THIRD-PARTY-NOTICES.txt" />
+	</ItemGroup>
+	<Target Name="CopyLicenses" AfterTargets="AfterBuild" Condition="'$(DeployDir)' != ''">
+		<Copy SourceFiles="@(LicenseFiles)" DestinationFolder="$(DeployDir)" />
 	</Target>
 
 	<Target Name="SetDescription" BeforeTargets="BeforeBuild" Condition="Exists('$(PublishConfigurationPath)')">

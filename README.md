@@ -1,7 +1,6 @@
 ![GitHub all releases](https://img.shields.io/github/downloads/ST-Apps/CS2-ExtendedRoadUpgrades/total)
 ![GitHub release (latest by SemVer including pre-releases)](https://img.shields.io/github/downloads-pre/ST-Apps/CS2-ExtendedRoadUpgrades/latest/total)
 ﻿[![CC BY-NC-SA 4.0][cc-by-nc-sa-shield]][cc-by-nc-sa]
-[![Static Badge](https://img.shields.io/badge/PayPal-donate-blue?logo=paypal&link=https%3A%2F%2Fpaypal.me%2FSTApps)](https://www.paypal.me/STApps)
 
 This work is licensed under a
 [Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License][cc-by-nc-sa].
@@ -15,6 +14,21 @@ This work is licensed under a
 # Cities: Skylines 2 - Extended Road Upgrades Continued
 
 This mod enables both **quays**, **retaining walls** and **elevated** upgrade options in the Network Upgrade tool.
+
+## License and attribution
+
+This repository is a **modified version** of [Extended Road Upgrades](https://github.com/ST-Apps/CS2-ExtendedRoadUpgrades)
+by ST-Apps, which is licensed under [CC BY-NC-SA 4.0][cc-by-nc-sa]. The original work is copyright (c) 2023-24
+ST-Apps (S. Tenuta); see [NOTICE.txt](./NOTICE.txt) and [LICENSE.txt](./LICENSE.txt).
+
+Because the license is *ShareAlike*, this continuation - including the published mod - is distributed under the same
+license, [CC BY-NC-SA 4.0][cc-by-nc-sa]: attribution must be kept, it may not be used commercially, and modified or
+redistributed versions must carry the same license. The changes made here are listed in [CHANGELOG.md](./CHANGELOG.md)
+(ported to game 1.6, renamed, published as a separate PDX Mods entry). This continuation is not affiliated with,
+sponsored or endorsed by the original author.
+
+The published mod bundles Harmony (`0Harmony.dll`, MIT) - its notice is in
+[THIRD-PARTY-NOTICES.txt](./THIRD-PARTY-NOTICES.txt).
 
 > [!IMPORTANT]
 > **This is not the original mod.** It is an independent continuation of
