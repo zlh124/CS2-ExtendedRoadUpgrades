@@ -1,3 +1,7 @@
+# 1.0.1
+
+- [ADD] License and third-party notices (LICENSE.txt, THIRD-PARTY-NOTICES.txt) are now shipped inside the mod and the mod page documents the CC BY-NC-SA 4.0 attribution and the bundled Harmony MIT notice
+
 # 1.0.0
 
 First release of the independent continuation of Extended Road Upgrades, ported to game version 1.6. Versioning restarts at 1.0.0 because this is published as a separate mod entry.

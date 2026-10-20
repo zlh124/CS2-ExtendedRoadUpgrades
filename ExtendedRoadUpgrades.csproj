@@ -6,7 +6,7 @@
 		<Authors>ST-Apps (original mod)</Authors>
 		<Copyright>Copyright © 2023-24 ST-Apps (S. Tenuta) - original work, CC BY-NC-SA 4.0. Modifications © the Extended Road Upgrades Continued authors.</Copyright>
 		<Product>$(Title)</Product>
-		<Version>1.0.0</Version>
+		<Version>1.0.1</Version>
 		<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<TargetFramework>net48</TargetFramework>

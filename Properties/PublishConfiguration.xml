@@ -55,14 +55,18 @@ These upgrades can be applied to:
   <!--Link to the forum post where the mod can be discussed.
       Intentionally not set: the original forum thread belongs to the discontinued upstream mod.-->
   <!--Version of the mod-->
-  <ModVersion Value="1.0.0" />
+  <ModVersion Value="1.0.1" />
   <!--Recommended version of the base game to use the mod-->
   <GameVersion Value="1.6.*" />
   <!--Dependency for the mod, can be set multiple times.
       The original mod depended on 'Unified Icon Library', but this mod hosts its own icons (coui://eruc/) and does
       not reference that library, so no dependency is declared.-->
   <!--ChangeLog for new version. Single line or multi line. Supports minimal markdown subset-->
-  <ChangeLog># 1.0.0
+  <ChangeLog># 1.0.1
+
+- [ADD] License and third-party notices (LICENSE.txt, THIRD-PARTY-NOTICES.txt) are now shipped inside the mod and the mod page documents the CC BY-NC-SA 4.0 attribution and the bundled Harmony MIT notice
+
+# 1.0.0
 
 First release of the independent continuation of Extended Road Upgrades, ported to game version 1.6. Versioning restarts at 1.0.0 because this is published as a separate mod entry.
 
